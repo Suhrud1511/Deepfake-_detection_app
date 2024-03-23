@@ -50,7 +50,8 @@
     <div class="image-container">
       <img src="data:image/jpeg;base64,{{ image }}" class="image">
       <div class="bounding-box {% if prediction == 'Real' %}real-box{% else %}fake-box{% endif %}"
-        style="top: {{ top }}%; left: {{ left }}%; width: {{ width }}%; height: {{ height }}%;"></div>
+        style="top: {{ top }}%; left: {{ left }}%; width: {{ width }}%; height: {{ height }}%;">
+      </div>
       <div class="label" style="top: {{ top }}%; left: {{ left }}%;">
         {{ prediction }}
       </div>
