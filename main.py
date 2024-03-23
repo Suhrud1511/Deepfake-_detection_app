@@ -65,7 +65,7 @@ class Meso4(Classifier):
         y = Dense(1, activation = 'sigmoid')(y)
 
         return Model(inputs = x, outputs = y)
-
+    
 # Load the MesoNet model
 meso = Meso4()
 meso.load('./weights/Meso4_DF')
