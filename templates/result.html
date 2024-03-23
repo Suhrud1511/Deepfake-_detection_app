@@ -5,13 +5,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deepfake Detection Result</title>
+  <style>
+    .container {
+      position: relative;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .image-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .bounding-box {
+      position: absolute;
+      border: 2px solid;
+      box-sizing: border-box;
+    }
+
+    .label {
+      position: absolute;
+      background-color: white;
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    .real-box {
+      border-color: green;
+    }
+
+    .fake-box {
+      border-color: red;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Prediction Result</h1>
-  <h2>This image is {{ prediction }}</h2>
+  <div class="container">
+    <div class="image-container">
+      <img src="data:image/jpeg;base64,{{ image }}" class="image">
+      <div class="bounding-box {% if prediction == 'Real' %}real-box{% else %}fake-box{% endif %}"
+        style="top: {{ top }}%; left: {{ left }}%; width: {{ width }}%; height: {{ height }}%;"></div>
+      <div class="label" style="top: {{ top }}%; left: {{ left }}%;">
+        {{ prediction }}
+      </div>
+    </div>
+  </div>
   <p>Confidence: {{ confidence }}</p>
-  <a href="/">Back to Upload</a>
 </body>
 
 </html>

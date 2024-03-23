@@ -1,9 +1,10 @@
 # Import necessary modules
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import io
+import base64
 import numpy as np
 from tensorflow.keras.layers import Input, Dense, Flatten, Conv2D, MaxPooling2D, BatchNormalization, Dropout
-from tensorflow.keras.layers import Reshape, LeakyReLU
+from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Model
@@ -83,15 +84,27 @@ def upload_file():
         # Read the image file as bytes
         img_bytes = file.read()
         # Convert the bytes to an image
-        img = img_to_array(load_img(io.BytesIO(img_bytes), target_size=(256, 256)))
+        img = load_img(io.BytesIO(img_bytes), target_size=(256, 256))
+        # Convert the image to an array
+        img_array = img_to_array(img)
         # Preprocess the image
-        img_array = np.expand_dims(img, axis=0) / 255.0  # Normalize pixel values
+        img_array = img_array / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
         # Make prediction
         prediction = meso.predict(img_array)[0][0]
-        # Determine the result
-        result = "Real" if prediction > 0.5 else "Deepfake"
+        # Determine the result and bounding box coordinates
+        if prediction > 0.5:
+            result = "Real"
+            color = "green"
+        else:
+            result = "Fake"
+            color = "red"
+        top, left, height, width = 10, 10, 80, 80  # Example bounding box coordinates
+        # Encode the image to base64 format
+        img_base64 = base64.b64encode(io.BytesIO(img_bytes).read()).decode('utf-8')
         # Render result page with prediction
-        return render_template('result.html', prediction=result, confidence=prediction)
+        return render_template('result.html', prediction=result, confidence=prediction,
+                               top=top, left=left, height=height, width=width, color=color, image=img_base64)
     # Render the upload form
     return render_template('index.html')
 
