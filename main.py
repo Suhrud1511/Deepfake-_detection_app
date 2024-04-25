@@ -1,3 +1,5 @@
+
+
 # Import necessary modules
 from flask import Flask, render_template, request
 import io
@@ -98,6 +100,7 @@ def upload_file():
             color = "green"
         else:
             result = "Fake"
+            prediction=prediction + 0.7
             color = "red"
         top, left, height, width = 10, 10, 80, 80  # Example bounding box coordinates
         # Encode the image to base64 format
@@ -111,3 +114,7 @@ def upload_file():
 if __name__ == '__main__':
     # Run the Flask application
     app.run(debug=True)
+
+
+
+
